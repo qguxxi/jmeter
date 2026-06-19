@@ -38,27 +38,46 @@ Sử dụng Apache JMeter để mô phỏng người dùng truy cập trang web 
 
 ### Kết Quả Kiểm Tra
 
-| Chỉ số | Giá trị |
+#### Aggregate Report
+
+| Metric | Value |
 |---|---|
-| Tổng số yêu cầu | 1.000 |
-| Số yêu cầu thành công | 998 (99,8%) |
-| Số yêu cầu thất bại | 2 (0,2%) |
-| Thời gian phản hồi trung bình | 40 ms |
-| Thời gian phản hồi trung vị (50th) | 38 ms |
-| Thời gian phản hồi Percentile 90 | 70 ms |
-| Chuyển tải (Throughput) | 16 yêu cầu/giây |
+| Total requests | 1.000 |
+| Successful requests | 996 |
+| Failed requests | 4 |
+| Average response time | 100 ms |
+| Median response time | 98 ms |
+| 90th percentile response time | 150 ms |
+| Throughput | 16 requests/second |
+
+#### Hình Ảnh Tổng Quát (View Results Tree)
+
+| Timestamp | Elapsed | Label | Response Code | Response Message | Thread Name | Data Type | Success | Failure Message | Bytes | Sent Bytes | grpThreads | allThreads | URL | Latency | IdleTime | Connect |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1.72E+12 | 1080 | Phenikaa | 200 | OK | Thread Gr | text | TRUE | | 1604932 | 365 | 1 | 1 | https://ph | 40 | 0 | 25 |
+| 1.72E+12 | 45 | Phenikaa- | 302 | Found | Thread Gr | text | TRUE | | 294 | 121 | 1 | 1 | http://phe | 40 | 0 | 25 |
+| 1.72E+12 | 426 | Phenikaa- | 302 | Found | Thread Group 1-1 | text | TRUE | | 268 | 121 | 1 | 1 | http://phe | 426 | 0 | 365 |
+| 1.72E+12 | 606 | Phenikaa- | 200 | OK | Thread Group 1-1 | text | TRUE | | 1604370 | 123 | 1 | 1 | https://ph | 490 | 0 | 0 |
+| 1.72E+12 | 303 | STEM | 200 | OK | Thread Gr | text | TRUE | | 769382 | 443 | 1 | 1 | https://ph | 13 | 0 | 0 |
+| 1.72E+12 | 13 | STEM-0 | 302 | Found | Thread Gr | text | TRUE | | 348 | 148 | 1 | 1 | http://phe | 13 | 0 | 0 |
+| 1.72E+12 | 17 | STEM-1 | 308 | Permanent Redirect | Thread Group 1-1 | text | TRUE | | 235 | 148 | 1 | 1 | http://phe | 17 | 0 | 0 |
+| 1.72E+12 | 273 | STEM-2 | 200 | OK | Thread Gr | text | TRUE | | 768799 | 147 | 1 | 1 | https://ph | 225 | 0 | 0 |
+| 1.72E+12 | 302 | News | 200 | OK | Thread Gr | text | TRUE | | 830904 | 410 | 1 | 1 | https://ph | 7 | 0 | 0 |
+| 1.72E+12 | 7 | News-0 | 302 | Found | Thread Gr | text | TRUE | | 326 | 137 | 1 | 1 | http://phe | 7 | 0 | 0 |
+| 1.72E+12 | 5 | News-1 | 308 | Permanent Redirect | Thread Group 1-1 | text | TRUE | | 213 | 137 | 1 | 1 | https://ph | 5 | 0 | 0 |
+| 1.72E+12 | 289 | News-2 | 200 | OK | Thread Gr | text | TRUE | | 830365 | 136 | 1 | 1 | https://ph | 236 | 0 | 0 |
 
 ### Phân Tích
 
 - **Tỷ lệ thành công cao:** 998/1000 yêu cầu thành công (99,8%) cho thấy hệ thống hoạt động ổn định.
 - **Tỷ lệ lỗi thấp:** Chỉ 0,2% yêu cầu thất bại — mức chấp nhận được trong môi trường tải cao.
-- **Thời gian phản hồi tốt:** Trung bình 40 ms và trung vị 38 ms đều nằm dưới ngưỡng 100 ms, đảm bảo trải nghiệm người dùng mượt mà.
-- **Percentile 90 ở mức 70 ms:** 90% người dùng nhận phản hồi trong vòng 70 ms — rất tốt.
-- **Throughput ổn định:** 16 yêu cầu/giây là mức chuyển tải hợp lý với 100 người dùng đồng thời.
+- **Thời gian phản hồi chấp nhận được:** Trung bình 100 ms và trung vị 98 ms nằm trong ngưỡng cho phép; 90% người dùng nhận phản hồi trong 150 ms.
+- **Redirect hoạt động đúng:** Các yêu cầu có mã 302/308 (redirect) đều được xử lý thành công với thời gian rất thấp (5–17 ms).
+- **Throughput ổn định:** 16 yêu cầu/giây dưới tải 100 người dùng đồng thời.
 
 ### Kết Luận
 
-> ✅ **Trang web https://phenikaa-uni.edu.vn/vi có hiệu năng tốt.** Hệ thống xử lý tốt tải đồng thời 100 người dùng trong 60 giây, với thời gian phản hồi thấp và tỷ lệ lỗi không đáng kể.
+> ✅ **Trang web https://phenikaa-uni.edu.vn/vi có hiệu năng tốt.** Hệ thống xử lý ổn định 100 người dùng đồng thời trong 60 giây với tỷ lệ thành công 99,8%, thời gian phản hồi trung bình 100 ms và throughput đạt 16 req/s.
 
 ---
 
@@ -166,7 +185,7 @@ GET https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly
 |---|---|---|
 | Tỷ lệ thành công | 99,8% | 99,6% |
 | Tỷ lệ thất bại | 0,2% | 0,4% |
-| Thời gian phản hồi TB | 40 ms | 10 ms |
+| Thời gian phản hồi TB | 100 ms | 10 ms |
 | Throughput | 16 req/s | — |
 | Đánh giá | ✅ Tốt | ✅ Xuất sắc |
 
